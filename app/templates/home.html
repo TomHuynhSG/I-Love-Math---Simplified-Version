@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block content %}
+
+<link rel="stylesheet" href="/static/css/style.css">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+<!-- Bootstrap core CSS -->
+<link href="static/mdb/css/bootstrap.min.css" rel="stylesheet">
+<!-- Material Design Bootstrap -->
+<link href="static/mdb/css/mdb.min.css" rel="stylesheet">
+<!-- Your custom styles (optional) -->
+<link href="static/mdb/css/style.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+<script src="static/js/index.js"></script>
+<script src="https://cdn.plot.ly/plotly-1.35.2.min.js"></script>
+        
+
+<section>
+    <br>
+    <div class="container">
+        
+        <h1 class="title">Magic - Calulator</h1>
+        <br>
+        <h2 class="subtitle"><strong>Start now!</strong></h2>
+
+    </div>
+
+    <body>
+
+        <div id="view">
+            <label for="result">Math expressions (You can type or edit here):</label>
+            <input id="result" name="result" type="text" class="border border-info ">
+            <br>
+            <label for="result2">Result: </label>
+            <input id="result2" name="result2" type="text" class="border border-info">
+
+        </div>
+
+        <br>
+        <div id="drawhere">
+            <button id="undo" class="btn sunny-morning-gradient"><strong>Undo</strong></button>
+             <label for="result">Draw your math expressions down below: </label>
+        </div>
+        <div>
+            <canvas id="canvas" style="border:5px solid;width: 100%;height: 350px;"></canvas>
+        </div> 
+
+        
+
+        <div class="container">
+            <button class="btn dusty-grass-gradient" type="button" id="myButton">
+                <strong>Predict</strong>
+            </button>
+
+            <button class="btn purple-gradient" type="button" id="clearButton">
+                    <strong>Clear</strong>
+            </button>
+
+            <button class="btn deep-blue-gradient" type="button" id="calcuButton">
+                    <strong>Calculate</strong>
+            </button>
+
+        </div>
+
+        <br>
+        <br>
+        
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script src="static/js/index.js"></script>
+        <script src="https://unpkg.com/mathjs@6.2.2/dist/math.min.js"></script>
+        <!-- Bootstrap core JavaScript -->
+        <script type="text/javascript" src="static/mdb/js/bootstrap.min.js"></script>
+        <!-- MDB core JavaScript -->
+        <script type="text/javascript" src="static/mdb/js/mdb.min.js"></script>
+        <script src="https://cdn.plot.ly/plotly-1.35.2.min.js"></script>
+        <script type="text/javascript">
+            $("#myButton").click(function () {
+                $('#result').text('  Predicting...');
+                    var $SCRIPT_ROOT = {{ request.script_root| tojson | safe
+                }};
+                var canvasObj = document.getElementById("canvas");
+                var img = canvasObj.toDataURL('image/jpeg');
+                $.ajax({
+                    type: "POST",
+                    url: $SCRIPT_ROOT + "/upload/",
+                    data: img,
+                    success: function (data) {
+                        $('#result').val(data);
+                    }
+                });
+                // var calcu.val
+            });
+
+
+
+            $("#calcuButton").click(function () {
+                $('#result2').text('  Predicting...');
+                    var $SCRIPT_ROOT = {{ request.script_root| tojson | safe
+                }};
+                var calcu = document.getElementById("result").value;
+                $.ajax({
+                    type: "POST",
+                    url: $SCRIPT_ROOT + "/calcu/",
+                    data: calcu,
+                    success: function (data) {
+                        $('#result2').val(data);
+                    }
+                });
+            });
+            
+            var $SCRIPT_ROOT = {{ request.script_root| tojson | safe}};
+            
+        </script>
+
+        </div>
+    </body>
+
+
+
+</section>
+
+{% endblock %}
